@@ -52,6 +52,11 @@
             </a>
           </li>
 
+          <keyboard-switch
+            :use-keyboard="useKeyboard"
+            @switch-keyboard="$emit('switch-keyboard', $event)"
+          />
+
           <search-input
             v-if="searchConfig"
             :lang="lang"
@@ -65,6 +70,7 @@
 
 <script>
 import SearchInput from './SearchInput';
+import KeyboardSwitch from './KeyboardSwitch';
 import { packageVersion } from 'site-desktop-shared';
 
 export default {
@@ -72,6 +78,7 @@ export default {
 
   components: {
     SearchInput,
+    KeyboardSwitch,
   },
 
   props: {
@@ -79,7 +86,10 @@ export default {
     config: Object,
     versions: Array,
     langConfigs: Array,
+    useKeyboard: Boolean,
   },
+
+  emits: ['switch-keyboard'],
 
   data() {
     return {

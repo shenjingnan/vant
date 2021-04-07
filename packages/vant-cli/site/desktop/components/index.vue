@@ -5,6 +5,8 @@
       :config="config"
       :versions="versions"
       :lang-configs="langConfigs"
+      :use-keyboard="useKeyboard"
+      @switch-keyboard="$emit('switch-keyboard', $event)"
       @switch-version="$emit('switch-version', $event)"
     />
     <doc-nav :lang="lang" :nav-config="config.nav" />
@@ -40,6 +42,7 @@ export default {
     versions: Array,
     simulator: String,
     hasSimulator: Boolean,
+    useKeyboard: Boolean,
     langConfigs: Array,
     config: {
       type: Object,
@@ -51,7 +54,7 @@ export default {
     },
   },
 
-  emits: ['switch-version'],
+  emits: ['switch-version', 'switch-keyboard'],
 
   watch: {
     $route() {
@@ -83,6 +86,10 @@ export default {
     },
 
     keyboardNav(direction) {
+      if (!this.useKeyboard) {
+        return;
+      }
+
       const nav = direction === 'prev' ? this.leftNav : this.rightNav;
       if (nav.path) {
         this.$router.push(this.base + nav.path);

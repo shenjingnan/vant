@@ -8,6 +8,8 @@
       :simulator="simulator"
       :has-simulator="hasSimulator"
       :lang-configs="langConfigs"
+      :use-keyboard="useKeyboard"
+      @switch-keyboard="useKeyboard = $event"
     >
       <router-view />
     </van-doc>
@@ -18,6 +20,7 @@
 import VanDoc from './components';
 import { config } from 'site-desktop-shared';
 import { setLang } from '../common/locales';
+import { getUseKeyboard, setUseKeyboard } from '../common/keyboard';
 
 export default {
   components: {
@@ -30,6 +33,7 @@ export default {
     return {
       simulator: `${path}mobile.html${location.hash}`,
       hasSimulator: true,
+      useKeyboard: getUseKeyboard(),
     };
   },
 
@@ -80,6 +84,10 @@ export default {
         }
       },
       immediate: true,
+    },
+
+    useKeyboard(val) {
+      setUseKeyboard(val);
     },
   },
 
