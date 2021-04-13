@@ -20,6 +20,8 @@ export default {
 </script>
 
 <style lang="less">
+@import '../../common/style/var';
+
 .van-doc-keyboard-switch {
   vertical-align: middle;
   position: relative;
