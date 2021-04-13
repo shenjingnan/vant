@@ -1,6 +1,6 @@
 {
   "name": "vant",
-  "version": "3.0.12",
+  "version": "3.0.13",
   "description": "Mobile UI Components built on Vue",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
     "prepare": "husky install",
     "release": "vant-cli release --tag next",
     "test:watch": "vant-cli test --watch",
-    "release:site": "sh docs/site/release.sh",
+    "release:site": "vant-cli build-site && gh-pages -d site --add --dest v3",
     "test:coverage": "open test/coverage/index.html"
   },
   "npm": {
@@ -60,7 +60,8 @@
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@vant/cli": "^3.9.2",
+    "@vant/cli": "^3.10.0",
+    "@vant/area-data": "^1.0.0",
     "@vue/compiler-sfc": "^3.0.6",
     "prettier": "2.1.0",
     "vue": "^3.0.6"

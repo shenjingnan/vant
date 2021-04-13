@@ -1,7 +1,6 @@
 import { ref, watch, computed, PropType, defineComponent } from 'vue';
 
 // Utils
-import { isNaN } from '../utils/validate/number';
 import {
   isDef,
   addUnit,
@@ -31,11 +30,13 @@ function add(num1: number, num2: number) {
   return Math.round((num1 + num2) * cardinal) / cardinal;
 }
 
+export type StepperTheme = 'default' | 'round';
+
 export default defineComponent({
   name,
 
   props: {
-    theme: String,
+    theme: String as PropType<StepperTheme>,
     integer: Boolean,
     disabled: Boolean,
     allowEmpty: Boolean,
@@ -106,7 +107,7 @@ export default defineComponent({
 
       value = formatNumber(String(value), !props.integer);
       value = value === '' ? 0 : +value;
-      value = isNaN(value) ? +min : value;
+      value = Number.isNaN(value) ? +min : value;
       value = Math.max(Math.min(+max, value), +min);
 
       // format decimal

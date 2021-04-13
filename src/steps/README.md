@@ -1,8 +1,12 @@
 # Steps
 
+### Intro
+
+Used to show the various parts of the action flow and let the user know where the current action fits into the overall flow.
+
 ### Install
 
-Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways。
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
 
 ```js
 import { createApp } from 'vue';
@@ -30,7 +34,7 @@ app.use(Steps);
 import { ref } from 'vue';
 
 export default {
-  steup() {
+  setup() {
     const active = ref(1);
     return { active };
   },

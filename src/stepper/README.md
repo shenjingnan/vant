@@ -1,8 +1,12 @@
 # Stepper
 
+### Intro
+
+The stepper component consists of an increase button, a decrease button and an input box, which are used to input and adjust numbers within a certain range.
+
 ### Install
 
-Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways。
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
 
 ```js
 import { createApp } from 'vue';

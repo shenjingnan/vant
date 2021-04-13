@@ -9,10 +9,11 @@ import {
 } from 'vue';
 
 // Utils
-import { isDate } from '../utils/validate/date';
 import {
   pick,
   range,
+  extend,
+  isDate,
   padZero,
   createNamespace,
   ComponentInstance,
@@ -39,8 +40,7 @@ const [name] = createNamespace('date-picker');
 export default defineComponent({
   name,
 
-  props: {
-    ...sharedProps,
+  props: extend({}, sharedProps, {
     modelValue: Date,
     type: {
       type: String as PropType<DatetimePickerType>,
@@ -56,7 +56,7 @@ export default defineComponent({
       default: () => new Date(currentYear + 10, 11, 31),
       validator: isDate,
     },
-  },
+  }),
 
   emits: ['confirm', 'cancel', 'change', 'update:modelValue'],
 

@@ -1,5 +1,11 @@
 import { App } from 'vue';
-import { isObject, inBrowser, ComponentInstance, withInstall } from '../utils';
+import {
+  extend,
+  isObject,
+  inBrowser,
+  withInstall,
+  ComponentInstance,
+} from '../utils';
 import { mountComponent, usePopupState } from '../utils/mount-component';
 import VanNotify, { NotifyType } from './Notify';
 
@@ -29,14 +35,7 @@ function initInstance() {
   ({ instance } = mountComponent({
     setup() {
       const { state, toggle } = usePopupState();
-      return () => (
-        <VanNotify
-          {...{
-            ...state,
-            'onUpdate:show': toggle,
-          }}
-        />
-      );
+      return () => <VanNotify {...state} {...{ 'onUpdate:show': toggle }} />;
     },
   }));
 }
@@ -50,16 +49,13 @@ function Notify(options: NotifyMessage | NotifyOptions) {
     initInstance();
   }
 
-  options = {
-    ...Notify.currentOptions,
-    ...parseOptions(options),
-  };
+  options = extend(Notify.currentOptions, parseOptions(options));
 
   instance.open(options);
   clearTimeout(timer);
 
   if (options.duration! > 0) {
-    timer = setTimeout(Notify.clear, options.duration);
+    timer = window.setTimeout(Notify.clear, options.duration);
   }
 
   return instance;

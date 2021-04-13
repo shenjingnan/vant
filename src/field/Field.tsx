@@ -13,6 +13,7 @@ import {
 // Utils
 import {
   isDef,
+  extend,
   addUnit,
   UnknownProp,
   resetScroll,
@@ -54,66 +55,70 @@ import type {
 
 const [name, bem] = createNamespace('field');
 
+// provide to Search component to inherit
+export const fieldProps = {
+  formatter: Function as PropType<(value: string) => string>,
+  leftIcon: String,
+  rightIcon: String,
+  autofocus: Boolean,
+  clearable: Boolean,
+  maxlength: [Number, String],
+  inputAlign: String as PropType<FieldTextAlign>,
+  placeholder: String,
+  errorMessage: String,
+  error: {
+    type: Boolean,
+    default: null,
+  },
+  disabled: {
+    type: Boolean,
+    default: null,
+  },
+  readonly: {
+    type: Boolean,
+    default: null,
+  },
+  clearIcon: {
+    type: String,
+    default: 'clear',
+  },
+  modelValue: {
+    type: [String, Number],
+    default: '',
+  },
+  clearTrigger: {
+    type: String as PropType<FieldClearTrigger>,
+    default: 'focus',
+  },
+  formatTrigger: {
+    type: String as PropType<FieldFormatTrigger>,
+    default: 'onChange',
+  },
+};
+
 export default defineComponent({
   name,
 
-  props: {
-    ...cellProps,
+  props: extend({}, cellProps, fieldProps, {
     rows: [Number, String],
     name: String,
     rules: Array as PropType<FieldRule[]>,
     autosize: [Boolean, Object] as PropType<boolean | FieldAutosizeConfig>,
-    leftIcon: String,
-    rightIcon: String,
-    clearable: Boolean,
-    formatter: Function as PropType<(value: string) => string>,
-    maxlength: [Number, String],
     labelWidth: [Number, String],
     labelClass: UnknownProp,
     labelAlign: String as PropType<FieldTextAlign>,
-    inputAlign: String as PropType<FieldTextAlign>,
-    placeholder: String,
     autocomplete: String,
-    errorMessage: String,
-    errorMessageAlign: String as PropType<FieldTextAlign>,
     showWordLimit: Boolean,
+    errorMessageAlign: String as PropType<FieldTextAlign>,
     type: {
       type: String as PropType<FieldType>,
       default: 'text',
-    },
-    error: {
-      type: Boolean,
-      default: null,
     },
     colon: {
       type: Boolean,
       default: null,
     },
-    disabled: {
-      type: Boolean,
-      default: null,
-    },
-    readonly: {
-      type: Boolean,
-      default: null,
-    },
-    clearIcon: {
-      type: String,
-      default: 'clear',
-    },
-    modelValue: {
-      type: [String, Number],
-      default: '',
-    },
-    clearTrigger: {
-      type: String as PropType<FieldClearTrigger>,
-      default: 'focus',
-    },
-    formatTrigger: {
-      type: String as PropType<FieldFormatTrigger>,
-      default: 'onChange',
-    },
-  },
+  }),
 
   emits: [
     'blur',
@@ -392,6 +397,7 @@ export default defineComponent({
         value: props.modelValue,
         disabled: getProp('disabled'),
         readonly: getProp('readonly'),
+        autofocus: props.autofocus,
         placeholder: props.placeholder,
         autocomplete: props.autocomplete,
         onBlur,
@@ -408,14 +414,7 @@ export default defineComponent({
         return <textarea {...inputAttrs} />;
       }
 
-      return (
-        <input
-          {...{
-            ...mapInputType(props.type),
-            ...inputAttrs,
-          }}
-        />
-      );
+      return <input {...mapInputType(props.type)} {...inputAttrs} />;
     };
 
     const renderLeftIcon = () => {

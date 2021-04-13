@@ -1,8 +1,12 @@
 # Icon
 
+### Intro
+
+The font-based icon set that can be used via the Icon component or referenced in other components via the `icon` attribute.
+
 ### Install
 
-Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways。
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
 
 ```js
 import { createApp } from 'vue';

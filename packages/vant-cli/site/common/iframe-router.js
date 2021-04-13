@@ -2,28 +2,76 @@
  * 同步父窗口和 iframe 的 vue-router 状态
  */
 
-import { iframeReady, isMobile } from '.';
+import { config } from 'site-desktop-shared';
 
-window.syncPath = function() {
-  const router = window.vueRouter;
-  const isInIframe = window !== window.top;
-  const currentDir = router.currentRoute.value.path;
+let queue = [];
+let isIframeReady = false;
 
-  if (isInIframe) {
-    window.top.replacePath(currentDir);
-  } else if (!isMobile) {
-    const iframe = document.querySelector('iframe');
-    if (iframe) {
-      iframeReady(iframe, () => {
-        iframe.contentWindow.replacePath(currentDir);
-      });
+function iframeReady(callback) {
+  if (isIframeReady) {
+    callback();
+  } else {
+    queue.push(callback);
+  }
+}
+
+if (window.top === window) {
+  window.addEventListener('message', (event) => {
+    if (event.data.type === 'iframeReady') {
+      isIframeReady = true;
+      queue.forEach((callback) => callback());
+      queue = [];
     }
-  }
-};
+  });
+} else {
+  window.top.postMessage({ type: 'iframeReady' }, '*');
+}
 
-window.replacePath = function(path = '') {
-  // should preserve hash for anchor
-  if (window.vueRouter.currentRoute.value.path !== path) {
-    window.vueRouter.replace(path).catch(() => {});
+function getCurrentDir() {
+  const router = window.vueRouter;
+  const { path } = router.currentRoute.value;
+
+  if (config.site.simulator?.routeMapper) {
+    return config.site.simulator?.routeMapper(path);
   }
-};
+  return path;
+}
+
+export function syncPathToParent() {
+  window.top.postMessage(
+    {
+      type: 'replacePath',
+      value: getCurrentDir(),
+    },
+    '*'
+  );
+}
+
+export function syncPathToChild() {
+  const iframe = document.querySelector('iframe');
+  if (iframe) {
+    iframeReady(() => {
+      iframe.contentWindow.postMessage(
+        {
+          type: 'replacePath',
+          value: getCurrentDir(),
+        },
+        '*'
+      );
+    });
+  }
+}
+
+export function listenToSyncPath(router) {
+  window.addEventListener('message', (event) => {
+    if (event.data?.type !== 'replacePath') {
+      return;
+    }
+
+    const path = event.data?.value || '';
+    // should preserve hash for anchor
+    if (router.currentRoute.value.path !== path) {
+      router.replace(path).catch(() => {});
+    }
+  });
+}

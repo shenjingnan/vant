@@ -1855,10 +1855,15 @@
     "@typescript-eslint/types" "4.6.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vant/cli@^3.9.2":
-  version "3.9.2"
-  resolved "https://registry.npm.taobao.org/@vant/cli/download/@vant/cli-3.9.2.tgz#6eb7149004c8b36bc5fc08c16cc36c78bcdd3b4b"
-  integrity sha1-brcUkATIs2vF/AjBbMNseLzdO0s=
+"@vant/area-data@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/@vant/area-data/download/@vant/area-data-1.0.0.tgz#063af9ccb5ccafa333d7dc28103937501cfec671"
+  integrity sha1-Bjr5zLXMr6Mz19woEDk3UBz+xnE=
+
+"@vant/cli@^3.10.0":
+  version "3.10.0"
+  resolved "https://registry.npmjs.org/@vant/cli/-/cli-3.10.0.tgz#a129adb56f15a3c31a7a2701e288ed9a642e734d"
+  integrity sha512-+Nj6YHxYgsgmDFrS31PiT2UwB70KO5EH3QLbzYDihoj0QfYEQmHdk+DAOeZ6IXgZR5Nb3EbZFFLKmebngYaisg==
   dependencies:
     "@babel/core" "^7.12.10"
     "@babel/plugin-transform-runtime" "^7.12.10"

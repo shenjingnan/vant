@@ -1,8 +1,12 @@
 # Grid
 
+### Intro
+
+Used to divide the page into blocks of equal width in the horizontal direction for displaying content or page navigation.
+
 ### Install
 
-Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways。
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
 
 ```js
 import { createApp } from 'vue';
@@ -69,7 +73,7 @@ app.use(GridItem);
 ### Horizontal
 
 ```html
-<van-grid direction="horizontal" :column-num="2">
+<van-grid direction="horizontal" :column-num="3">
   <van-grid-item icon="photo-o" text="文字" />
   <van-grid-item icon="photo-o" text="文字" />
   <van-grid-item icon="photo-o" text="文字" />

@@ -1,5 +1,9 @@
 # ActionBar 动作栏
 
+### 介绍
+
+用于为页面相关操作提供便捷交互。
+
 ### 引入
 
 通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
@@ -136,17 +140,18 @@ export default {
 
 组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
 
-| 名称                             | 默认值             | 描述 |
-| -------------------------------- | ------------------ | ---- |
-| @action-bar-background-color     | `@white`           | -    |
-| @action-bar-height               | `50px`             | -    |
-| @action-bar-icon-width           | `48px`             | -    |
-| @action-bar-icon-height          | `100%`             | -    |
-| @action-bar-icon-color           | `@text-color`      | -    |
-| @action-bar-icon-size            | `18px`             | -    |
-| @action-bar-icon-font-size       | `@font-size-xs`    | -    |
-| @action-bar-icon-active-color    | `@active-color`    | -    |
-| @action-bar-icon-text-color      | `@gray-7`          | -    |
-| @action-bar-button-height        | `40px`             | -    |
-| @action-bar-button-warning-color | `@gradient-orange` | -    |
-| @action-bar-button-danger-color  | `@gradient-red`    | -    |
+| 名称                              | 默认值             | 描述 |
+| --------------------------------- | ------------------ | ---- |
+| @action-bar-background-color      | `@white`           | -    |
+| @action-bar-height                | `50px`             | -    |
+| @action-bar-icon-width            | `48px`             | -    |
+| @action-bar-icon-height           | `100%`             | -    |
+| @action-bar-icon-color            | `@text-color`      | -    |
+| @action-bar-icon-size             | `18px`             | -    |
+| @action-bar-icon-font-size        | `@font-size-xs`    | -    |
+| @action-bar-icon-active-color     | `@active-color`    | -    |
+| @action-bar-icon-text-color       | `@gray-7`          | -    |
+| @action-bar-icon-background-color | `@white`           | -    |
+| @action-bar-button-height         | `40px`             | -    |
+| @action-bar-button-warning-color  | `@gradient-orange` | -    |
+| @action-bar-button-danger-color   | `@gradient-red`    | -    |

@@ -5,6 +5,8 @@
     - [name](#name)
     - [build.css](#buildcss)
     - [build.site](#buildsite)
+    - [build.srcDir](#buildsrcdir)
+    - [build.namedExport](#buildnamedexport)
     - [site.title](#sitetitle)
     - [site.logo](#sitelogo)
     - [site.description](#sitedescription)
@@ -13,6 +15,7 @@
     - [site.baiduAnalytics](#sitebaiduanalytics)
     - [site.searchConfig](#sitesearchconfig)
     - [site.hideSimulator](#sitehidesimulator)
+    - [site.simulator.url](#sitesimulatorurl)
   - [Webpack](#webpack)
   - [Babel](#babel)
     - [默认配置](#-1)
@@ -124,6 +127,17 @@ module.exports = {
 };
 ```
 
+### build.namedExport
+
+- Type: `boolean`
+- Default: `false`
+
+是否通过 Named Export 对组件进行导出。
+
+未开启此选项时，会通过 `export default from 'xxx'` 导出组件内部的默认模块。
+
+开启此选项后，会通过 `export * from 'xxx'` 导出组件内部的所有模块、类型定义。
+
 ### site.title
 
 - Type: `string`
@@ -231,6 +245,13 @@ module.exports = {
 - Default: `false`
 
 是否隐藏所有页面右侧的手机模拟器，默认不隐藏
+
+### site.simulator.url
+
+- Type: `string`
+- Default: -
+
+自定义手机模拟器的 iframe URL 地址。
 
 ### site.htmlPluginOptions
 

@@ -1,9 +1,7 @@
 import { deepClone } from '../deep-clone';
 import { deepAssign } from '../deep-assign';
-import { isDef, get, noop } from '..';
-import { isMobile } from '../validate/mobile';
-import { isNumeric } from '../validate/number';
-import { isAndroid } from '../validate/system';
+import { get, noop } from '..';
+import { isDef, isMobile, isNumeric, isAndroid } from '../validate';
 import { camelize } from '../format/string';
 import { formatNumber } from '../format/number';
 import { addUnit, unitToPx } from '../format/unit';
@@ -111,11 +109,13 @@ test('addUnit', () => {
 });
 
 test('unitToPx', () => {
-  const originGetComputedStyle = window.getComputedStyle;
+  const mockedStyle = { fontSize: '16px' } as CSSStyleDeclaration;
+  const spy = jest
+    .spyOn(window, 'getComputedStyle')
+    .mockReturnValue(mockedStyle);
 
   Object.defineProperty(window, 'innerWidth', { value: 100 });
   Object.defineProperty(window, 'innerHeight', { value: 200 });
-  window.getComputedStyle = () => ({ fontSize: '16px' } as CSSStyleDeclaration);
 
   expect(unitToPx(0)).toEqual(0);
   expect(unitToPx(10)).toEqual(10);
@@ -125,5 +125,5 @@ test('unitToPx', () => {
   expect(unitToPx('10vw')).toEqual(10);
   expect(unitToPx('10vh')).toEqual(20);
 
-  window.getComputedStyle = originGetComputedStyle;
+  spy.mockRestore();
 });

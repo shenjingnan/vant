@@ -9,8 +9,13 @@ import {
 } from 'vue';
 
 // Utils
-import { ComponentInstance, createNamespace, isObject } from '../utils';
-import { isMobile } from '../utils/validate/mobile';
+import {
+  extend,
+  isObject,
+  isMobile,
+  createNamespace,
+  ComponentInstance,
+} from '../utils';
 
 // Composables
 import { useExpose } from '../composables/use-expose';
@@ -96,7 +101,7 @@ export default defineComponent({
     },
     addressInfo: {
       type: Object as PropType<Partial<AddressEditInfo>>,
-      default: () => ({ ...defaultData }),
+      default: () => extend({}, defaultData),
     },
     telValidator: {
       type: Function as PropType<(val: string) => boolean>,
@@ -317,10 +322,7 @@ export default defineComponent({
     watch(
       () => props.addressInfo,
       (value) => {
-        state.data = {
-          ...defaultData,
-          ...value,
-        };
+        state.data = extend({}, defaultData, value);
         setAreaCode(value.areaCode);
       },
       {
