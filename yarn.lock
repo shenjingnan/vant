@@ -1961,9 +1961,9 @@
     eslint-plugin-vue "^7.1.0"
 
 "@vant/icons@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/@vant/icons/-/icons-1.6.0.tgz#3db7eb7f963f51a2a08676720d5af9c4c3512feb"
-  integrity sha512-4Hvq4tl4grCOJLZ0e8ZaivBV8xOcmTPmTT8BDkTrEIKqnDowRFDdsXxcHECzWmbmMx+CYGdngvd2Cq8YR9DfKA==
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@vant/icons/-/icons-1.7.1.tgz#49ae420302b5581e54e6894891e5a05bc76e9f87"
+  integrity sha512-66LPEq89w4kl258nALZcRNd14eUJC8VajvTJwvZKOaZawz6CUeVZ6ybhedTUhQhRjeA8SyWD7dFt4ALf33Sabw==
 
 "@vant/lazyload@^1.2.0":
   version "1.2.0"
