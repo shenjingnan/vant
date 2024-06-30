@@ -333,6 +333,10 @@ location.href = location.href.replace('youzan.github.io', 'vant-ui.github.io');
                 title: 'List 列表',
               },
               {
+                path: 'virtual-list',
+                title: 'VirtualList 虚拟列表',
+              },
+              {
                 path: 'notice-bar',
                 title: 'NoticeBar 通知栏',
               },
