@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import VanVirtualList from '..';
-const items = Array.from({ length: 20 }, (_, index) => index);
+import VanVirtualListItem from '../../virtual-list-item';
+const items = Array.from({ length: 2000 }, (_, index) => ({
+  index: index,
+  style: {
+    height: Math.floor(Math.random() * (150 - 80 + 1)) + 80 + 'px'
+  }
+}));
 </script>
 
 <template>
@@ -10,9 +16,17 @@ const items = Array.from({ length: 20 }, (_, index) => index);
     :item-height="100"
   >
     <template #default="{ start, end }">
-      <div class="item" :key="item" v-for="item in items.slice(start, end)">
-        item: {{ item }} 999
-      </div>
+      <van-virtual-list-item
+          class="item"
+          :style="item.style"
+          :key="item.index"
+          v-for="item in items.slice(start, end)"
+      >
+        item: {{ item.index }}
+        start: {{ start }}
+        <br>
+        {{ item.style }}
+      </van-virtual-list-item>
     </template>
   </van-virtual-list>
 </template>
