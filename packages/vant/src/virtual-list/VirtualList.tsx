@@ -15,7 +15,7 @@ const [name, bem] = createNamespace('virtual-list');
 
 export const virtualListProps = {
   itemHeight: makeNumberProp(0),
-  bufferCount: makeNumberProp(0),
+  bufferCount: makeNumberProp(1),
 };
 
 export type VirtualListProps = ExtractPropTypes<typeof virtualListProps>;
@@ -35,8 +35,8 @@ export default defineComponent({
     default: { start: number; end: number };
   }>,
 
-  setup(props, { slots }) {
-    const { linkChildren, children } = useChildren(VIRTUAL_LIST_KEY);
+  setup(props, {slots}) {
+    const {linkChildren, children} = useChildren(VIRTUAL_LIST_KEY);
 
     // watch(children, (newChildren) => {
     //   let heightTotal = 0;
@@ -49,7 +49,7 @@ export default defineComponent({
     // 实际上只要拿到当前即将隐藏的height就可以了
     // 因为原先的height已经缓存了
 
-    const { bufferCount, itemHeight } = props;
+    const {bufferCount, itemHeight} = props;
     const root = ref<Element>()
     const windowHeight = computed(() => root.value?.clientHeight ?? 0);
     const visiableCount = computed(() => windowHeight.value / itemHeight)
@@ -63,8 +63,8 @@ export default defineComponent({
     // });
     // const paddingTop = ref(0);
     const paddingTop = computed(() => {
-      return childrenHeight.value.slice(0, -1 * bufferCount).reduce((a,b) => a+b, 0)
-       // return (hideIndex.value + 1) * itemHeight;
+      return childrenHeight.value.slice(0, -1 * bufferCount).reduce((a, b) => a + b, 0)
+      // return (hideIndex.value + 1) * itemHeight;
     });
 
     const style = computed(() => {
@@ -83,7 +83,7 @@ export default defineComponent({
       // const start = hideIndex.value + 1;
       // console.log(start)
       // const end = Math.ceil(start + 8) + bufferCount;
-      return slots.default({ start: start.value, end: end.value });
+      return slots.default({start: start.value, end: end.value});
     };
 
     const hideHeight = ref(0);
@@ -93,7 +93,7 @@ export default defineComponent({
       return [...topChildren.value.values()]
     })
     const topTotalHeight = computed(() => {
-      return [...topChildren.value.values()].reduce((a,b) => a+b, 0);
+      return [...topChildren.value.values()].reduce((a, b) => a + b, 0);
     });
 
     let index = 0;
@@ -101,37 +101,53 @@ export default defineComponent({
 
     let time = 0
     // 使用一个数组缓存已经消失的child的高度
+    let prevOffset = 0
     const onScroll = (event: Event) => {
-        const target = event.target as HTMLDivElement;
-        startOffset.value = target.scrollTop;
 
-        // const scrollTop = getScrollTop(root.value as Element);
-        // prevHeight.value += scrollTop - hideHeight.value;
-        const childIndex = index > bufferCount ? bufferCount : index
-        const curChild = children[childIndex]
-        const height = curChild.height.value;
-        // console.log('scrollTop', scrollTop);
-        // console.log(target.scrollTop)
-        // console.log(scrollTop)
-        // console.log(target.scrollTop, height)
-        const { size } = topChildren.value;
-        const height3 = childrenHeight.value.slice(0, size > bufferCount ? -1 * bufferCount : size)
-        const last3Height = height3.reduce((a,b) => a+b, 0)
-        // console.log(target.scrollTop, last3Height, height)
-        // console.log(target.scrollTop, height)
-        const top = target.scrollTop - last3Height;
-        console.log('nemo onscroll', `index: ${index}`, {top, height, last3Height, height3 })
-        // console.log(currentChild.getRect(root.value, useRect(root)))
-        if (top - height >= 0 && top - height <= 0.5) {
-          const currentTime = Date.now()
-          if (!topChildren.value.has(index) && (time === 0 || currentTime - time > 100)) {
-            time = currentTime
-            topChildren.value.set(index++, height);
-          }
-          // console.log('childrenHeight len:', childrenHeight.value.length)
-          // if (childrenHeight.value.length > 3) {
-          // }
+      const target = event.target as HTMLDivElement;
+      startOffset.value = target.scrollTop;
+      const offset = target.scrollTop - prevOffset;
+      prevOffset = target.scrollTop;
+      console.log('和上一次偏移相差：', offset, target.scrollTop)
+        // , '\n', 'prev', prevOffset, 'current', target.scrollTop
+
+      // const scrollTop = getScrollTop(root.value as Element);
+      // prevHeight.value += scrollTop - hideHeight.value;
+      const childIndex = index > bufferCount ? bufferCount : index
+      const curChild = children[childIndex]
+      const height = curChild.height.value;
+      // console.log('scrollTop', scrollTop);
+      // console.log(target.scrollTop)
+      // console.log(scrollTop)
+      // console.log(target.scrollTop, height)
+      const {size} = topChildren.value;
+      const height3 = childrenHeight.value.slice(-1 * bufferCount)
+      const last3Height = height3.reduce((a, b) => a + b, 0)
+      // console.log(target.scrollTop, last3Height, height)
+      // console.log(target.scrollTop, height)
+      const top = target.scrollTop - last3Height;
+      console.log(target.scrollTop);
+      // console.log('nemo onscroll', `index: ${index}`, {
+      //   'target.scrollTop': target.scrollTop,
+      //   top,
+      //   height,
+      //   last3Height,
+      //   height3: JSON.stringify(height3),
+      //   childrenHeight: JSON.stringify(childrenHeight.value)
+      // })
+      // TODO: top 这个值可能会跳过几个偏移量
+      // TODO: top 这个值我们要确定的时候可能他已经跳过了n个div
+      // console.log(currentChild.getRect(root.value, useRect(root)))
+      if (top - height >= 0 && top - height <= 0.5) {
+        const currentTime = Date.now()
+        if (!topChildren.value.has(index) && (time === 0 || currentTime - time > 100)) {
+          time = currentTime
+          topChildren.value.set(index++, height);
         }
+        // console.log('childrenHeight len:', childrenHeight.value.length)
+        // if (childrenHeight.value.length > 3) {
+        // }
+      }
       // hideIndex++ will change paddingTop
       // topIndex++
       // if topIndex >= 3 do hideIndex++
@@ -164,9 +180,9 @@ export default defineComponent({
 
     return () => {
       return (
-        <div style={style } ref={root} role="feed" class={bem()} onScroll={onScroll}>
+        <div style={style} ref={root} role="feed" class={bem()} onScroll={onScroll}>
           <div class={bem('wrapper')}>
-            {slots.default({ start: start.value, end: end.value })}
+            {slots.default({start: start.value, end: end.value})}
           </div>
         </div>
       );

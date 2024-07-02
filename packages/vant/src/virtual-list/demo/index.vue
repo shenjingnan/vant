@@ -4,7 +4,7 @@ import VanVirtualListItem from '../../virtual-list-item';
 const items = Array.from({ length: 2000 }, (_, index) => ({
   index: index,
   style: {
-    height: Math.floor(Math.random() * (150 - 80 + 1)) + 80 + 'px'
+    height: Math.floor(Math.random() * (100 - 70) + 70) + 'px'
   }
 }));
 </script>
@@ -24,6 +24,7 @@ const items = Array.from({ length: 2000 }, (_, index) => ({
       >
         item: {{ item.index }}
         start: {{ start }}
+        end: {{ end }}
         <br>
         {{ item.style }}
       </van-virtual-list-item>
