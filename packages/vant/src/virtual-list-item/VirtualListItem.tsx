@@ -1,4 +1,4 @@
-import { watch, ref, defineComponent } from 'vue';
+import {ref, defineComponent, onMounted, nextTick} from 'vue';
 
 // Utils
 import {createNamespace, getRootScrollTop, getScrollTop} from '../utils';
@@ -15,9 +15,14 @@ const [name, bem] = createNamespace('virtual-list-item');
 export default defineComponent({
   name,
 
-  setup(_, { slots }) {
+  props: {
+    index: Number,
+  },
+
+  setup(props, { slots }) {
     const root = ref();
-    const { parent, index } = useParent(VIRTUAL_LIST_KEY);
+    const { index } = props;
+    const { parent, index: displayIndex } = useParent(VIRTUAL_LIST_KEY);
     const height = useHeight(root)
 
     if (!parent) {
@@ -52,9 +57,11 @@ export default defineComponent({
       return rect;
     };
 
-    const onscroll = () => {
-      console.log('nemo onscroll')
-    }
+    onMounted(() => {
+      nextTick(() => {
+        parent.cacheChildHeight(index, height.value)
+      })
+    });
 
     useExpose({ height, getRect });
 
