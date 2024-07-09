@@ -1,4 +1,4 @@
-import {ref, defineComponent, onMounted, nextTick} from 'vue';
+import {ref, defineComponent, onMounted, nextTick, computed} from 'vue';
 
 // Utils
 import {createNamespace, getRootScrollTop, getScrollTop} from '../utils';
@@ -9,6 +9,8 @@ import { VIRTUAL_LIST_KEY } from '../virtual-list/VirtualList';
 // Composables
 import {useParent, useRect} from '@vant/use';
 import {useHeight} from "../composables/use-height";
+import {useVisibilityChange} from "../composables/use-visibility-change";
+import {vi} from "vitest";
 
 const [name, bem] = createNamespace('virtual-list-item');
 
@@ -57,9 +59,25 @@ export default defineComponent({
       return rect;
     };
 
+    useVisibilityChange(root, (visible: boolean) => {
+      if (visible) {
+        // parent.visibleItem(index);
+      }
+    })
+
+    // const top = ref(0)
+
+    // const style = computed(() => ({
+    //   transform: `translate3d(0, ${top.value}px, 0)`,
+    //   position: 'absolute',
+    //   'will-change': 'transform',
+    //   width: '100%',
+    // }))
+
     onMounted(() => {
       nextTick(() => {
-        parent.cacheChildHeight(index, height.value)
+        // parent.cacheChildHeight(index, height.value);
+        // top.value = parent.getTopByIndex(index);
       })
     });
 

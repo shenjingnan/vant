@@ -5,7 +5,7 @@ import VanVirtualListItem from '../../virtual-list-item';
 
 const heights = [100, 110, 120, 130, 140, 150, 160]
 console.log('总高度:', heights.reduce((a, b) => a + b, 0))
-const items = Array.from({length: 2000}, (_, index) => {
+const items = Array.from({length: 1e4 }, (_, index) => {
   let height = Math.floor(Math.random() * (100 - 70) + 70)
   if (heights[index]) height = heights[index]
   return {
@@ -28,6 +28,7 @@ const add = () => {
 </script>
 
 <template>
+  <div style="width: 100%;height: 200px;background-color:#cfcfcf;"></div>
   current: {{ y }}
   <br>
   <input v-model="val" type="text">
@@ -49,8 +50,6 @@ const add = () => {
           v-for="item in items.slice(start, end)"
       >
         item: {{ item.index }}
-        <!--        start: {{ start }}-->
-        <!--        end: {{ end }}-->
         <br>
         {{ item.style }}
       </van-virtual-list-item>
