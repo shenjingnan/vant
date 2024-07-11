@@ -6,12 +6,13 @@ import VanVirtualListItem from '../../virtual-list-item';
 const heights = [100, 110, 120, 130, 140, 150, 160]
 console.log('总高度:', heights.reduce((a, b) => a + b, 0))
 const items = Array.from({length: 1e4 }, (_, index) => {
-  let height = Math.floor(Math.random() * (100 - 70) + 70)
+  let height = Math.floor(Math.random() * (120 - 80) + 80)
   if (heights[index]) height = heights[index]
   return {
     index: index,
+    height,
     style: {
-      height: 100 + 'px'
+      height: height + 'px'
     }
   }
 });

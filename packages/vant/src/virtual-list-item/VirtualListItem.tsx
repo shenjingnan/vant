@@ -76,7 +76,7 @@ export default defineComponent({
 
     onMounted(() => {
       nextTick(() => {
-        // parent.cacheChildHeight(index, height.value);
+        parent.childReady(index, height.value);
         // top.value = parent.getTopByIndex(index);
       })
     });

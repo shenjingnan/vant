@@ -17,7 +17,7 @@ const [name, bem] = createNamespace('virtual-list');
 
 export const virtualListProps = {
   itemHeight: makeNumberProp(0),
-  buffer: makeNumberProp(1),
+  buffer: makeNumberProp(10),
   list: makeArrayProp<unknown>(),
 };
 
@@ -43,24 +43,47 @@ export default defineComponent({
     const root = ref<Element>();
     const {linkChildren, children} = useChildren(VIRTUAL_LIST_KEY);
 
-    const gap = 6
+    const gap = 6 + buffer;
     const start = ref(0)
     const end = ref(gap);
 
     // TODO: 上拉加载更多
     // 判断当前底部是否还有剩余buffer
 
+    const heights = ref<number[]>([])
     const top = ref(0)
+
+    const findIndex = (heights: number[], matchHeight: number) => {
+      let prevHeight = 0;
+      const index = heights.findIndex((height) => {
+        if (prevHeight + height > matchHeight) {
+          return true;
+        }
+        prevHeight += height;
+        return false;
+      });
+      return {
+        index,
+        prevHeight,
+      }
+    }
+
     const onScroll = (event: Event) => {
       const target = event.target as HTMLDivElement;
       const scrollTop = target.scrollTop > 0 ? target.scrollTop : 0;
-      const _start = Math.floor(scrollTop / itemHeight)
+
+      const matched = findIndex(heights.value, scrollTop);
+      const _start = matched.index;
       start.value = _start;
-      top.value = _start * itemHeight;
+      top.value = matched.prevHeight;
       end.value = _start + gap;
     }
 
-    linkChildren({} as VirtualListProvide);
+    const childReady = (index: number, height: number) => {
+      heights.value[index] = height;
+    }
+
+    linkChildren({ childReady });
 
     const style = computed(() => {
       return {
@@ -70,6 +93,7 @@ export default defineComponent({
 
     const style2 = computed(() => {
       return {
+        // display: "flex", flexDirection: "column",
         transform: `translate3d(0, ${top.value}px, 0)`,
       }
     })
