@@ -2,9 +2,12 @@
 import { ref } from 'vue'
 import VanVirtualList from '..';
 import VanVirtualListItem from '../../virtual-list-item';
+import VanImage from '../../image';
+import { cdnURL } from '../../../docs/site';
 
 const heights = [100, 110, 120, 130, 140, 150, 160]
 console.log('总高度:', heights.reduce((a, b) => a + b, 0))
+const image = cdnURL('cat.jpeg');
 const items = Array.from({length: 1e4 }, (_, index) => {
   let height = Math.floor(Math.random() * (120 - 80) + 80)
   if (heights[index]) height = heights[index]
@@ -12,7 +15,7 @@ const items = Array.from({length: 1e4 }, (_, index) => {
     index: index,
     height,
     style: {
-      height: height + 'px'
+      // height: height + 'px'
     }
   }
 });
@@ -53,6 +56,7 @@ const add = () => {
         item: {{ item.index }}
         <br>
         {{ item.style }}
+        <van-image :src="image" />
       </van-virtual-list-item>
     </template>
   </van-virtual-list>
@@ -68,7 +72,7 @@ const add = () => {
 }
 
 .item {
-  height: 100px;
+  //height: 100px;
   border-bottom: 1px solid;
   box-sizing: border-box;
 }

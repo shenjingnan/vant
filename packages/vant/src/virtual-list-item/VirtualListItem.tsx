@@ -79,6 +79,7 @@ export default defineComponent({
       console.log('newHeight', newHeight)
     })
     useResize(root, ({ height  }) => {
+      console.log('nemo resize item', height)
       parent.childReady(index, height);
     });
 
