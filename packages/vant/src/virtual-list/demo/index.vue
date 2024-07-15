@@ -32,6 +32,9 @@ const add = () => {
 </script>
 
 <template>
+  <!-- TODO: 基础使用 -->
+  <!-- TODO: 图片懒加载 -->
+  <!-- TODO: 极限高度场景 -->
   <div style="width: 100%;height: 200px;background-color:#cfcfcf;"></div>
   current: {{ y }}
   <br>
