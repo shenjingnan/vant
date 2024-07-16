@@ -47,21 +47,12 @@ const add = () => {
       :item-height="100"
       :list="items"
   >
-    <template #default="{ start, end }">
-      <van-virtual-list-item
-          class="item"
-          :style="item.style"
-          :key="item.index"
-          :data-index="item.index"
-          :index="item.index"
-          v-for="item in items.slice(start, end)"
-      >
-        item: {{ item.index }}
-        <br>
-        {{ item.style }}
-        <van-image :src="image" />
+      <van-virtual-list-item class="item">
+        <template #default="{ item }">
+          item: {{ item.index }} <br> {{ item.style }}
+          <van-image :src="image" />
+        </template>
       </van-virtual-list-item>
-    </template>
   </van-virtual-list>
 </template>
 

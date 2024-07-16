@@ -20,11 +20,12 @@ export default defineComponent({
 
   props: {
     index: Number,
+    item: Object,
   },
 
   setup(props, { slots }) {
     const root = ref();
-    const { index } = props;
+    const { item, index } = props;
     const { parent, index: displayIndex } = useParent(VIRTUAL_LIST_KEY);
     const height = useHeight(root)
 
@@ -94,7 +95,7 @@ export default defineComponent({
     useExpose({ height, getRect });
 
     return () => {
-      return <div ref={root} class={[bem()]}>{slots.default ? slots?.default() : null}</div>;
+      return <div ref={root} class={[bem()]}>{slots.default ? slots?.default({ item }) : null}</div>;
     };
   },
 });

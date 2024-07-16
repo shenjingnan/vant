@@ -4,7 +4,7 @@ import {
   defineComponent,
   type SlotsType,
   type InjectionKey,
-  type ExtractPropTypes, watch, nextTick,
+  type ExtractPropTypes, watch, nextTick, cloneVNode,
 } from 'vue';
 
 // Utils
@@ -35,7 +35,7 @@ export default defineComponent({
   props: virtualListProps,
 
   slots: Object as SlotsType<{
-    default: { start: number; end: number; isScrolling: boolean };
+    default: { item: any, index: number };
   }>,
 
   setup(props, {slots}) {
@@ -67,7 +67,6 @@ export default defineComponent({
         prevHeight,
       }
     }
-
     const onScroll = (event: Event) => {
       const target = event.target as HTMLDivElement;
       const scrollTop = target.scrollTop > 0 ? target.scrollTop : 0;
@@ -93,7 +92,6 @@ export default defineComponent({
 
     const style2 = computed(() => {
       return {
-        // display: "flex", flexDirection: "column",
         transform: `translate3d(0, ${top.value}px, 0)`,
       }
     })
@@ -103,7 +101,15 @@ export default defineComponent({
         <div role="feed" class={bem()} ref={root} onScroll={onScroll}>
           <div style={style.value}>
             <div style={style2.value}>
-              {slots.default({start: start.value, end: end.value})}
+              {{
+                default: () => {
+                  return list.slice(start.value, end.value)
+                    .map((item: any, index) => {
+                      const vnode = slots.default({ item, index });
+                      return cloneVNode(vnode[0], { key: item.index || index, index: item.index, item: item });
+                    })
+                }
+              }}
             </div>
           </div>
         </div>
