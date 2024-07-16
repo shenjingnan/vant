@@ -1,7 +1,7 @@
-import {ref, defineComponent, onMounted, nextTick, computed, watch} from 'vue';
+import {ref, defineComponent, onMounted, nextTick, watch} from 'vue';
 
 // Utils
-import {createNamespace, getRootScrollTop, getScrollTop} from '../utils';
+import {createNamespace, getRootScrollTop, getScrollTop, makeNumberProp} from '../utils';
 import { useExpose } from '../composables/use-expose';
 
 import { VIRTUAL_LIST_KEY } from '../virtual-list/VirtualList';
@@ -10,7 +10,6 @@ import { VIRTUAL_LIST_KEY } from '../virtual-list/VirtualList';
 import {useParent, useRect} from '@vant/use';
 import {useHeight} from "../composables/use-height";
 import {useVisibilityChange} from "../composables/use-visibility-change";
-import {vi} from "vitest";
 import {useResize} from "../composables/use-resize";
 
 const [name, bem] = createNamespace('virtual-list-item');
@@ -19,14 +18,14 @@ export default defineComponent({
   name,
 
   props: {
-    index: Number,
+    index: makeNumberProp(-1),
     item: Object,
   },
 
   setup(props, { slots }) {
     const root = ref();
     const { item, index } = props;
-    const { parent, index: displayIndex } = useParent(VIRTUAL_LIST_KEY);
+    const { parent } = useParent(VIRTUAL_LIST_KEY);
     const height = useHeight(root)
 
     if (!parent) {
@@ -37,11 +36,6 @@ export default defineComponent({
       }
       return;
     }
-
-    // watch(height, () => {
-    //   const rect = useRect(root)
-    //   console.log(rect)
-    // })
 
     const getRect = (
       scrollParent: Window | Element,
@@ -57,7 +51,6 @@ export default defineComponent({
         rect.top = rootRect.top + getScrollTop(scrollParent) - scrollParentRect.top
       }
 
-      // console.log(rect)
       return rect;
     };
 
@@ -67,27 +60,18 @@ export default defineComponent({
       }
     })
 
-    // const top = ref(0)
-
-    // const style = computed(() => ({
-    //   transform: `translate3d(0, ${top.value}px, 0)`,
-    //   position: 'absolute',
-    //   'will-change': 'transform',
-    //   width: '100%',
-    // }))
-
     watch(height, (newHeight) => {
       console.log('newHeight', newHeight)
     })
+
     useResize(root, ({ height  }) => {
       console.log('nemo resize item', height)
-      parent.childReady(index, height);
+      parent.updateChildHeight(index, height);
     });
 
     onMounted(() => {
       nextTick(() => {
-        parent.childReady(index, height.value);
-        // top.value = parent.getTopByIndex(index);
+        parent.updateChildHeight(index, height?.value ?? 0);
       })
     });
 

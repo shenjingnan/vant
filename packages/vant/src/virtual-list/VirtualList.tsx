@@ -1,17 +1,16 @@
 import {
   ref,
   computed,
+  cloneVNode,
   defineComponent,
   type SlotsType,
   type InjectionKey,
-  type ExtractPropTypes, watch, nextTick, cloneVNode,
+  type ExtractPropTypes,
 } from 'vue';
 
 // Utils
-import {doubleRaf, useChildren, useRect} from '@vant/use';
-import {makeNumberProp, createNamespace, getScrollTop, makeArrayProp} from '../utils';
-import {useExpose} from "../composables/use-expose";
-import {throttle} from '../lazyload/vue-lazyload/util';
+import {useChildren} from '@vant/use';
+import {makeNumberProp, createNamespace, makeArrayProp} from '../utils';
 
 const [name, bem] = createNamespace('virtual-list');
 
@@ -24,7 +23,7 @@ export const virtualListProps = {
 export type VirtualListProps = ExtractPropTypes<typeof virtualListProps>;
 
 export type VirtualListProvide = {
-  props: VirtualListProps;
+  updateChildHeight: (index: number, height: number) => void;
 };
 
 export const VIRTUAL_LIST_KEY: InjectionKey<VirtualListProvide> = Symbol(name);
@@ -78,19 +77,19 @@ export default defineComponent({
       end.value = _start + gap;
     }
 
-    const childReady = (index: number, height: number) => {
+    const updateChildHeight = (index: number, height: number) => {
       heights.value[index] = height;
     }
 
-    linkChildren({ childReady });
+    linkChildren({ updateChildHeight });
 
-    const style = computed(() => {
+    const scrollWindowStyle = computed(() => {
       return {
         minHeight: `${list.length * itemHeight}px`,
       }
     })
 
-    const style2 = computed(() => {
+    const visibleWindowStyle = computed(() => {
       return {
         transform: `translate3d(0, ${top.value}px, 0)`,
       }
@@ -99,8 +98,8 @@ export default defineComponent({
     return () => {
       return (
         <div role="feed" class={bem()} ref={root} onScroll={onScroll}>
-          <div style={style.value}>
-            <div style={style2.value}>
+          <div style={scrollWindowStyle.value}>
+            <div style={visibleWindowStyle.value}>
               {{
                 default: () => {
                   return list.slice(start.value, end.value)
