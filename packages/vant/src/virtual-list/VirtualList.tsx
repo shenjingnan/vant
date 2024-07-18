@@ -11,6 +11,7 @@ import {
 // Utils
 import {useChildren} from '@vant/use';
 import {makeNumberProp, createNamespace, makeArrayProp} from '../utils';
+import VirtualListItem from "../virtual-list-item";
 
 const [name, bem] = createNamespace('virtual-list');
 
@@ -105,7 +106,7 @@ export default defineComponent({
                   return list.slice(start.value, end.value)
                     .map((item: any, index) => {
                       const vnode = slots.default({ item, index });
-                      return cloneVNode(vnode[0], { key: item.index || index, index: item.index, item: item });
+                      return <VirtualListItem key={item.index} index={item.index} item={item}>{ vnode }</VirtualListItem>
                     })
                 }
               }}

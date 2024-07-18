@@ -47,12 +47,10 @@ const add = () => {
       :item-height="100"
       :list="items"
   >
-      <van-virtual-list-item class="item">
-        <template #default="{ item }">
-          item: {{ item.index }} <br> {{ item.style }}
-          <van-image :src="image" />
-        </template>
-      </van-virtual-list-item>
+    <template #default="{ item }">
+      item: {{ item.index }} <br> {{ item.style }}
+      <van-image :src="image" />
+    </template>
   </van-virtual-list>
 </template>
 
